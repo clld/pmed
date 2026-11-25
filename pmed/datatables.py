@@ -12,7 +12,21 @@ from clld.db.meta import DBSession
 from clld.web.util.htmllib import HTML, literal
 from clld.web.util.helpers import icon, link
 from clld_cognacy_plugin.models import Cognateset, Cognate
-from clld_cognacy_plugin.datatables import Cognates
+from clld_cognacy_plugin.datatables import Cognates, Cognatesets
+
+from pmed.models import Etymon
+
+
+class Etyma(Cognatesets):
+    def col_defs(self):
+        return [
+            IdCol(self, 'id'),
+            Col(self, 'protolanguage', model_col=Etymon.protolanguage),
+            LinkCol(self, 'name'),
+            Col(self, 'description'),
+            Col(self, 'semantic_field', model_col=Etymon.semantic_field, choices=get_distinct_values(Etymon.semantic_field)),
+            Col(self, 'semantic_subfield', model_col=Etymon.semantic_subfield, choices=get_distinct_values(Etymon.semantic_subfield)),
+        ]
 
 #
 # Values:

@@ -100,7 +100,13 @@ def main(args):
             description='; '.join(nfilter(pages))
         ))
 
+    meaning = None
     for row in args.cldf['CognatesetTable']:
+        #
+        # FIXME: take over meaning from previous cognateset if empty!
+        #
+        if row['Description'] and row['Description'] != 'None':
+            meaning = row['Description']
         name = (row['Name'] or '').split()
         if len(name) == 0:
             plang, reconstruction = '-', '-'
@@ -110,8 +116,13 @@ def main(args):
             plang = name[0]
             reconstruction = ' '.join(name[1:])
         data.add(
-            Cognateset, row['ID'],
-            id=row['ID'].rjust(4, '0'), name=f"{plang}\t{reconstruction}", description=row["Description"])
+            models.Etymon, row['ID'],
+            id=row['ID'].rjust(4, '0'),
+            name=reconstruction,
+            semantic_field=row['Semantic_Field'],
+            semantic_subfield=row['Semantic_Subfield'],
+            protolanguage=plang,
+            description=meaning)
 
     for row in args.cldf['CognateTable']:
         data.add(

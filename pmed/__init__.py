@@ -9,8 +9,7 @@ from clld_cognacy_plugin.interfaces import ICognate
 
 # we must make sure custom models are known at database initialization!
 from pmed import models
-
-
+from pmed import datatables
 
 
 
@@ -22,5 +21,5 @@ def main(global_config, **settings):
     config.include('clld_cognacy_plugin')
     config.include('clldmpg')
     config.register_resource('cognate', Cognate, ICognate, with_index=True)
-
+    config.register_datatable('cognatesets', datatables.Etyma)
     return config.make_wsgi_app()
